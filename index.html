@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Generator</title>
+  <style>
+    body {
+      text-align: center;
+      margin: 50px;
+      background-color: #CAEDF7;
+      font-family: "Poppins", sans-serif;
+    }
+
+    button {
+      padding: 0.5rem;
+      border-radius: 1rem;
+      background: red;
+      color: white;
+      border: 0;
+      font-size: 15px;
+      margin: 1rem;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .container div {
+      margin: 1rem;
+    }
+
+    #password {
+      /* margin-top: 20px; */
+      font-size: 1.2em;
+      border-radius: 5px;
+      padding: 1rem;
+      width: 60%;
+    }
+
+    .btn {
+      margin-top: 1rem;
+    }
+    .parent-container{
+      margin-top: 10%;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div class="parent-container">
+    <h1>Password Generator</h1>
+    <input type="text" id="password" placeholder="password will be generated here"> <br> <br>
+    <div class="container">
+      <div>
+        <label for="length">Password Length</label>
+        <input type="number" max="12" min="6" value="7" id="length" />
+      </div>
+      <div>
+        <label for="uppercase">Include Uppercase : </label>
+        <input type="checkbox" id="uppercase" checked>
+      </div>
+      <div>
+        <label for="lowercase">Include Lowercase:</label>
+        <input type="checkbox" id="lowercase" checked>
+      </div>
+      <div>
+        <label for="special">Include Special Characters:</label>
+        <input type="checkbox" id="special" checked>
+      </div>
+      <div>
+        <label for="number">Include Numbers</label>
+        <input type="checkbox" id="number" checked>
+      </div>
+    </div>
+    <div class="btn"><button onclick="generatePassword()">Generate Password</button>
+      <button onclick="copyToClipboard()" id="copyButton" disabled>Copy Password</button>
+    </div>
+    <!-- <div id="password"></div> -->
+
+    <div id="notification"></div>
+  </div>
+
+  <script>
+    function generatePassword() {
+
+      const notification = document.getElementById('notification');
+      const length = document.getElementById('length').value;
+      const includeUppercase = document.getElementById('uppercase').checked;
+      const includeLowercase = document.getElementById('lowercase').checked;
+      const includeSpecial = document.getElementById('special').checked;
+      const includeNumber = document.getElementById('number').checked;
+
+      const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+      const specialChars = '!@#$%^&*()-_+=[]{}|;:,.<>?';
+      const numbers = '123456789';
+
+      let characters = '';
+
+      if (includeUppercase) {
+        characters += uppercaseChars;
+      }
+
+      if (includeLowercase) {
+        characters += lowercaseChars;
+      }
+
+      if (includeSpecial) {
+        characters += specialChars;
+      }
+      if (includeNumber) {
+        characters = characters + numbers;
+      }
+      console.log(characters)
+
+      let password = '';
+
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters.charAt(randomIndex);
+      }
+
+      const passwordDisplay = document.getElementById('password');
+      const copyButton = document.getElementById('copyButton');
+
+      // # The ['.innerText property is used to get or set the text content of an element, not the value of an input element']. ['To set the value of an input element, you need to use the value property instead']
+
+      // passwordDisplay.innerText = password;// if i wanted to display the password in div
+      passwordDisplay.value = password;
+      copyButton.disabled = false;
+    }
+
+    function copyToClipboard(text) {
+      const passwordDisplay = document.getElementById('password');
+      const passwordText = passwordDisplay.value;
+      navigator.clipboard.writeText(passwordText);
+      setTimeout(() => {
+        showNotification();
+      }, 500)
+      // console.log(passwordText)
+      // alert('Password copied to clipboard!');
+    }
+    let message = '';
+    function showNotification() {
+      notification.innerText = 'Password copied to clipboard!';//upar notification div mei text dala
+      setTimeout(() => {
+        notification.innerText = '';// fir use fir khali kr diya
+      }, 2000);
+    }
+  </script>
+</body>
+
+</html>
